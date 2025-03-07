@@ -7,7 +7,7 @@ typedef struct // Criei uma estrutura para que não fosse necessário criar uma 
     char estado[3];
     char codigoEstado[5];
     char nomeCidade[50];
-    int populacao;
+    unsigned long int populacao;
     float areaEmKmQuadrado;
     float pib;
     int numPontosTuristicos;
@@ -24,10 +24,18 @@ float calcularDensidadePopulacional(float populacao, float area)
 
 float calcularPibPerCapita(float pib, int populacao)
 {
-    float pibPerCapita = (pib * 1e9) / populacao; // Convertendo o numero para reais elevando o numero digitado para se tornar bilhão
+    float pibPerCapita = (pib * 1e9) / populacao; // Convertendo o numero para reais
 
     return pibPerCapita;
 };
+
+float calcularSuperPoder(int populacao, float areaEmKmQuadrado, float pib, int numPontosTuristicos, float pibPerCapita, float densidadePopulacional) {
+
+    float superPoder = (float) populacao + areaEmKmQuadrado + pib + numPontosTuristicos + pibPerCapita + (1 / densidadePopulacional);
+
+    return superPoder;
+
+}
 
 void exibirCartas(char estado[3], char codEstado[5], char nomeCidade[50], int populacao, float areaEmKmQuadrado, float pib, int numPontosTuristicos)
 {
@@ -35,13 +43,14 @@ void exibirCartas(char estado[3], char codEstado[5], char nomeCidade[50], int po
     printf("Estado: %s\n", estado);
     printf("Código: %s\n", codEstado);
     printf("Nome da Cidade: %s\n", nomeCidade);
-    printf("População: %d\n", populacao);
+    printf("População: %lu\n", populacao);
     printf("Área: %.2f Km²\n", areaEmKmQuadrado);
-    printf("PIB: %.2f bilhões de reais\n", pib);
+    printf("PIB: %f bilhões de reais\n", pib);
     printf("Número de Pontos Turísticos: %d\n", numPontosTuristicos);
     printf("Densidade populacional: %.2f hab/km² \n", calcularDensidadePopulacional(populacao, areaEmKmQuadrado));
-    printf("PIB per capita: %.2f reais \n", calcularPibPerCapita(pib, populacao));
-}
+    printf("PIB per capita: %.5f mil reais \n", calcularPibPerCapita(pib, populacao));
+    printf("Super Poder é: %f", calcularSuperPoder(populacao, areaEmKmQuadrado, pib, numPontosTuristicos, calcularPibPerCapita(pib, populacao), calcularDensidadePopulacional(populacao, areaEmKmQuadrado)));
+};
 
 int main()
 {
@@ -155,6 +164,30 @@ int main()
     printf("\n--------------------------------------------------------------------------\n");
 
     printf("Todas as cartas foram cadastradas com sucesso! ✅");
+
+    printf("\n--------------------------------------------------------------------------\n");
+
+    printf("\nAgora vamos descobrir os vencedores 🎮🥳🥳🥳\n");
+
+    printf("\n--------------------------------------------------------------------------\n");
+
+    int vencedorPopulacao = carta1.populacao > carta2.populacao;
+    int vencedorArea = carta1.areaEmKmQuadrado > carta2.areaEmKmQuadrado;
+    int vencedorPib = carta1.pib > carta2.pib;
+    int vencedorPontosTuristicos = carta1.numPontosTuristicos > carta2.numPontosTuristicos;
+    int vencedorDensidadePopulacional = calcularDensidadePopulacional(carta1.populacao, carta1.areaEmKmQuadrado) > calcularDensidadePopulacional(carta2.populacao, carta2.areaEmKmQuadrado);
+    int vencedorPibPerCapita = calcularPibPerCapita(carta1.pib, carta1.populacao) > calcularPibPerCapita(carta2.pib, carta2.populacao);
+    int vencedorSuperPoder = calcularSuperPoder( carta1.populacao, carta1.areaEmKmQuadrado, carta1.pib, carta1.numPontosTuristicos, calcularPibPerCapita(carta1.pib, carta1.populacao), calcularDensidadePopulacional(carta1.populacao, carta1.areaEmKmQuadrado) ) > calcularSuperPoder( carta2.populacao, carta2.areaEmKmQuadrado, carta2.pib, carta2.numPontosTuristicos, calcularPibPerCapita(carta2.pib, carta2.populacao), calcularDensidadePopulacional(carta2.populacao, carta2.areaEmKmQuadrado) );
+    
+
+    printf("Comparação de Cartas: \n");
+    printf("População da Carta 1 venceu? (%d) \n", vencedorPopulacao);
+    printf("Área da Carta 1 venceu? (%d) \n", vencedorArea);
+    printf("PIB da Carta 1 venceu? (%d) \n", vencedorPib);
+    printf("Pontos turísticos da Carta 1 venceu? (%d) \n", vencedorPontosTuristicos);
+    printf("Densidade populacional da Carta 1 venceu? (%d) \n", vencedorDensidadePopulacional);
+    printf("Pib Per Capita da Carta 1 venceu? (%d) \n", vencedorPibPerCapita);
+    printf("Super poder da Carta 1 venceu? (%d) \n", vencedorSuperPoder);
 
     return 0;
 }
